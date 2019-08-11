@@ -1,0 +1,89 @@
+@charset "UTF-8";
+/* CSS Document */
+
+.tooltip-warming-a {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-warming-a .tooltiptext-warming-a {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -60px;
+  
+  /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+  opacity: 0;
+  transition: opacity .25s;
+	width: 120px;
+}
+
+.tooltip-warming-a:hover .tooltiptext-warming-a {
+  visibility: visible;
+  opacity: 0.85;
+	border: solid 1px white;
+}
+
+.tooltip-warming-b {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-warming-b .tooltiptext-warming-b {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 20%;
+  margin-left: -60px;
+  
+  /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+  opacity: 0;
+  transition: opacity .25s;
+	width: 300px;
+}
+
+.tooltip-warming-b:hover .tooltiptext-warming-b {
+  visibility: visible;
+  opacity: 0.85;
+	border: solid 1px white;
+}
+
+.tooltip-warming-c {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-warming-c .tooltiptext-warming-c {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 20%;
+  margin-left: -60px;
+  
+  /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+  opacity: 0;
+  transition: opacity .25s;
+  width: 370px;
+}
+
+.tooltip-warming-c:hover .tooltiptext-warming-c {
+  visibility: visible;
+  opacity: 0.85;
+  border: solid 1px white;
+}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+    .bar {
+        fill: #FF7D7D;
+    }
+    
+    .bar:hover {
+        fill: #FFB2B2;
+    }
+    
+    .axis {
+        font: 10px sans-serif;
+        fill: white;
+    }
+    
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: white;
+        shape-rendering: crispEdges;
+    }
+    
+    
+    body {
+        background-color: black;
+        color: white;
+    }
+    
+    .x.axis {
+        color: white;
+    }
+  .tooltip {
+    background-color: black;
+    margin: 10px;
+    padding: 20px;
+    border: solid 1px white;
+	color: white;
+	opacity: 0.85;
+	font-family: HelveticaNeue;
+  }
+	a{
+	color: white;
+	text-decoration: underline;
+}
+</style>
+<body>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="tooltips.js"></script>
+<script>
+
+var margin = {top: 20, right: 20, bottom: 30, left: 100},
+    width = 1150 - margin.left - margin.right,
+    height = 450 - margin.top - margin.bottom;
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+	.tickValues([1950, 1967, 1985, 2002, 2018]);
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .tickValues([0, 182046584000, 364093168000]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var formatComma = d3.format(","),
+    formatMoney = function(d) { return "$" + formatDecimalComma(d); };
+	
+d3.tsv("data.tsv", type, function(error, data) {
+  if (error) throw error;
+
+  x.domain(data.map(function(d) { return d.year; }));
+  y.domain([0, d3.max(data, function(d) { return d.damage; })]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+
+  svg.selectAll(".bar")
+      .data(data)
+    	.enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.year); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.damage); })
+      .attr("height", function(d) { return height - y(d.damage); })
+      .call(d3.helper.tooltip(function (d) {return "Year: <b>" + d.year + "</b><br/>Recorded Economic Damage: $" + formatComma(d.damage) +" <br>(in US dollars) <br>Source: <a href='https://www.emdat.be/'>EM-DAT</a>";}));
+});
+
+function type(d) {
+  d.damage = +d.damage;
+  return d;
+}
+
+</script>
+</body>

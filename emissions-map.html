@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+	html, body {
+		overflow-x: hidden;
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+		margin: 0;
+		padding: 0;
+		background-color: black;
+		color: white;
+		position:relative;
+	}
+	div.map-container{
+		height: 800px;
+		width: 1200px;
+		background-image: url("_back2.png");
+		background-size: 100%;
+		background-repeat: no-repeat;
+		background-position: top; 
+		text-align: center;
+		position: relative;
+	}
+	h2{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		opacity: 0.65;
+		font-family: HelveticaNeue-Bold;
+		font-size: 32px;
+		color: #FFFFFF;
+		letter-spacing: -0.21px;
+		line-height: 38px;
+		writing-mode: vertical-rl;  /* `vertical-rl` and a rotation will achieve the same effect */
+    	transform: scaleX(-1) scaleY(-1);
+	}
+	h2.americas{
+    	transform: translate(-1625%, -225%);
+	}
+	h2.europe{
+    	transform: translate(-590%, -350%);
+	}
+	h2.africa{
+    	transform: translate(-705%, 135%);
+	}
+	h2.asia{
+    	transform: translate(-95%, 255%);
+	}
+	h2.oceania{
+    	transform: translate(1425%, 100%);
+	}
+	
+	div.country{
+		background: #FFCD89;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+	}
+	div.US{
+		transform: translate(-255%, -120%);
+		height: 211px;
+		width: 211px;
+		background: white;
+	}
+	div.CANADA{
+		transform: translate(-635%, -463%);
+		height: 72px;
+		width: 72px;
+	}
+	div.MEXICO{
+		transform: translate(-715%, -51%);
+		height: 66px;
+		width: 66px;
+	}
+	div.BRAZIL{
+		transform: translate(-621%, 234%);
+		height: 67px;
+		width: 67px;
+	}
+	div.ARGEN{
+		transform: translate(-1015%, 550%);
+		height: 42px;
+		width: 42px;
+	}
+	div.EU{
+		transform: translate(-70%, -185%);
+		height: 173px;
+		width: 173px;
+	}
+	div.RUSSIA{
+		transform: translate(50%, -290%);
+		height: 121px;
+		width: 121px;
+	}
+	div.UKRAINE{
+		transform: translate(-295%, -308%);
+		height: 44px;
+		width: 44px;
+	}
+	div.TURKEY{
+		transform: translate(-295%, -91%);
+		height: 65px;
+		width: 65px;
+	}
+	div.SA{
+		transform: translate(-207%, 20%);
+		height: 75px;
+		width: 75px;
+	}
+	div.UAE{
+		transform: translate(-159%, 32%);
+		height: 45px;
+		width: 45px;
+	}
+	
+	div.S-AFRICA{
+		transform: translate(-285%, 320%);
+		height: 63px;
+		width: 63px;
+	}
+	
+	div.CHINA{
+		transform: translate(70%, -47%);
+		height: 295px;
+		width: 295px;
+	}
+	div.INDIA{
+		transform: translate(36%, 30%);
+		height: 145px;
+		width: 145px;
+	}
+	div.JAPAN{
+		transform: translate(479%, -280%);
+		height: 101px;
+		width: 101px;
+	}
+	div.S-KOREA{
+		transform: translate(560%, -305%);
+		height: 72px;
+		width: 72px;
+	}
+	div.KAZA{
+		transform: translate(296%, -320%);
+		height: 50px;
+		width: 50px;
+	}
+	div.PHILI{
+		transform: translate(972%, 456%);
+		height: 36px;
+		width: 36px;
+	}
+	div.INDONE{
+		transform: translate(428%, 280%);
+		height: 65px;
+		width: 65px;
+	}
+	div.AUSTR{
+		transform: translate(806%, 430%);
+		height: 59px;
+		width: 59px;
+	}
+	.tooltip {
+	  position: relative;
+	  display: inline-block;
+	}
+
+	.tooltip .tooltiptext {
+	  visibility: hidden;
+	  background-color: black;
+	  color: #fff;
+	  text-align: left;
+	  padding: 20px;
+	  position: absolute;
+	  bottom: 50%;
+	  left: 50%;
+	  margin-left: -20px;
+	  z-index: 1;
+
+	  /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+	  opacity: 0;
+	  transition: opacity .25s;
+	  width: 215px;
+	}
+	.tooltip:hover .tooltiptext {
+	  visibility: visible;
+	  opacity: 0.85;
+      border: solid 1px white;
+	}
+	.tooltip-us {
+	  position: relative;
+	  display: inline-block;
+	}
+	.tooltip-us .tooltiptext-us {
+	  visibility: hidden;
+	  background-color: black;
+	  color: #fff;
+	  text-align: left;
+	  padding: 20px;
+	  position: absolute;
+	  bottom: 40%;
+	  left: 50%;
+	  margin-left: -20px;
+	  z-index: 1;
+
+	  /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+	  opacity: 0;
+	  transition: opacity .25s;
+	  width: 215px;
+	}
+	.tooltip-us:hover .tooltiptext-us {
+	  visibility: visible;
+	  opacity: 0.85;
+      border: solid 1px white;
+	}
+	
+	.tooltip-down {
+	  position: relative;
+	  display: inline-block;
+	}
+
+	.tooltip-down .tooltiptext-down {
+	  visibility: hidden;
+	  background-color: black;
+	  color: #fff;
+	  text-align: left;
+	  padding: 20px;
+	  position: absolute;
+	  bottom: -25%;
+	  left: 50%;
+	  margin-left: -5px;
+	  z-index: 1;
+
+	  /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+	  opacity: 0;
+	  transition: opacity .25s;
+	  width: 215px;
+	}
+	.tooltip-down:hover .tooltiptext-down {
+	  visibility: visible;
+	  opacity: 0.85;
+      border: solid 1px white;
+	}
+	
+	.tooltip-left {
+	  position: relative;
+	  display: inline-block;
+	}
+
+	.tooltip-left .tooltiptext-left {
+	  visibility: hidden;
+	  background-color: black;
+	  color: #fff;
+	  text-align: left;
+	  padding: 20px;
+	  position: absolute;
+	  bottom: 50%;
+	  left: -150%;
+	  margin-left: -50px;
+	  z-index: 1;
+
+	  /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+	  opacity: 0;
+	  transition: opacity .25s;
+	  width: 215px;
+	}
+	.tooltip-left:hover .tooltiptext-left {
+	  visibility: visible;
+	  opacity: 0.85;
+      border: solid 1px white;
+	}
+	
+	
+	.label-a{
+	  position: absolute;
+	  top: 16px;
+	  left: 16px;
+	  color: black;
+	  text-align: left;
+	}
+	.label-a p{
+	  margin: 0;
+      padding: 0;
+	  padding-bottom: 5px;
+	}
+	.label-a h3{
+	  font-size: 35px;
+	  font-weight: 300;
+	  margin: 0;
+      padding: 0;
+	}
+	
+	.label-b{
+	  position: absolute;
+	  top: 12px;
+	  left: 12px;
+	  color: black;
+	  text-align: left;
+	}
+	.label-b p{
+	  margin: 0;
+      padding: 0;
+	  padding-bottom: 3px;
+	}
+	.label-b h3{
+	  font-size: 25px;
+	  font-weight: 300;
+	  margin: 0;
+      padding: 0;
+	}
+	
+	.label-c{
+	  position: absolute;
+	  top: 8.5px;
+	  left: 8px;
+	  color: black;
+	  text-align: left;
+	}
+	.label-c p{
+	  margin: 0;
+      padding: 0;
+	  padding-bottom: 2px;
+		font-size: 11px;
+		line-height: 1;
+	}
+	.label-c h3{
+	  font-size: 20px;
+	  font-weight: 400;
+	  margin: 0;
+      padding: 0;
+	}
+	
+	.label-d{
+	  position: absolute;
+	  top: 6px;
+	  left: 4.5px;
+	  color: black;
+	  text-align: left;
+	}
+	.label-d p{
+	  margin: 0;
+      padding: 0;
+	  padding-bottom: 2px;
+		font-size: 11px;
+		line-height: 1;
+	}
+	.label-d h3{
+	  font-size: 20px;
+	  font-weight: 400;
+	  margin: 0;
+      padding: 0;
+	}
+	
+	.label-e{
+	  position: absolute;
+	  top: 4px;
+	  left: 3px;
+	  color: black;
+	  text-align: left;
+	}
+	.label-e p{
+	  margin: 0;
+      padding: 0;
+	  padding-bottom: 2px;
+	  font-size: 8px;
+	  letter-spacing: -0.5px;
+	}
+	.label-f{
+	  position: absolute;
+	  top: 4px;
+	  left: 2.5px;
+	  color: black;
+	  text-align: left;
+	}
+	.label-f p{
+	  margin: 0;
+      padding: 0;
+	  padding-bottom: 2px;
+	  font-size: 6px;
+	  letter-spacing: -0.5px;
+	}
+	
+</style>
+<body>
+	<div class="map-container">
+	
+		<h2 class="americas">Americas</h2>
+		<h2 class="europe">Europe</h2>
+		<h2 class="africa">Africa</h2>
+		<h2 class="asia">Asia</h2>
+		<h2 class="oceania">Oceania</h2>
+
+		<div class="country US tooltip-us">
+			<span class="tooltiptext-us"><b>United States</b><br>18% of global CO<sup>2</sup> emissions<br>5,269,529,513 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+			<div class="label-a">
+				<p>United<br>States</p>
+				<h3>18%</h3>
+			</div>
+		</div>
+		<div class="country CANADA tooltip-down">
+			<span class="tooltiptext-down"><b>Canada</b><br>2% of global CO<sup>2</sup> emissions<br>572,782,585.8 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+		    <div class="label-c">
+				<p>Canada</p>
+				<h3>2%</h3>
+			</div>
+		</div>
+		<div class="country MEXICO tooltip">
+			<span class="tooltiptext"><b>Mexico</b><br>2% of global CO<sup>2</sup> emissions<br>490,294,629.3 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+		    <div class="label-c">
+				<p>Mexico</p>
+				<h3>2%</h3>
+			</div>
+		</div>
+		
+	
+		
+		<div class="country RUSSIA tooltip-down">
+			<span class="tooltiptext-down"><b>Russia</b><br>6% of global CO<sup>2</sup> emissions<br>1,692,794,839 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+			<div class="label-a">
+				<p>Russia</p>
+				<h3>6%</h3>
+			</div>
+		</div>
+	
+		
+		<div class="country UAE tooltip">
+			<span class="tooltiptext"><b>UAE</b><br>1% of global CO<sup>2</sup> emissions<br>231,773,458 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+		    <div class="label-e">
+				<p>UAE</p>
+			</div>
+		</div>
+		
+		<div class="country CHINA tooltip">
+			<span class="tooltiptext"><b>China</b><br>33% of global CO<sup>2</sup> emissions<br>9,838,754,028 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+			<div class="label-a">
+				<p>China</p>
+				<h3>33%</h3>
+			</div>
+		</div>
+		<div class="country INDIA tooltip">
+			<span class="tooltiptext"><b>India</b><br>8% of global CO<sup>2</sup> emissions<br>2,466,765,373 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+			<div class="label-a">
+				<p>India</p>
+				<h3>8%</h3>
+			</div>
+		</div>
+		<div class="country JAPAN tooltip-left">
+			<span class="tooltiptext-left"><b>Japan</b><br>4% of global CO<sup>2</sup> emissions<br>1,205,061,178 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+			<div class="label-b">
+				<p>Japan</p>
+				<h3>4%</h3>
+			</div>
+		</div>
+		<div class="country S-KOREA tooltip-left">
+			<span class="tooltiptext-left"><b>South Korea</b><br>2% of global CO<sup>2</sup> emissions<br>616,096,686.8 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+		    <div class="label-c">
+				<p>South<br>Korea</p>
+				<h3>2%</h3>
+			</div>
+		</div>
+		<div class="country KAZA tooltip">
+			<span class="tooltiptext"><b>Kazakhstan</b><br>1% of global CO<sup>2</sup> emissions<br>292,588,516.6 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+		    <div class="label-e">
+				<p>Kazakhstan</p>
+			</div>
+		</div>
+		<div class="country PHILI tooltip-left">
+			<span class="tooltiptext-left"><b>Philippines</b><br>less than 1% of global CO<sup>2</sup> emissions<br>127,607,963.1 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+		    <div class="label-f">
+				<p>Philippines</p>
+			</div>
+		</div>
+		<div class="country INDONE tooltip">
+			<span class="tooltiptext"><b>Indonesia</b><br>2% of global CO<sup>2</sup> emissions<br>486,843,756.2 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+		    <div class="label-d">
+				<p>Indonesia</p>
+				<h3>2%</h3>
+			</div>
+		</div>
+		<div class="country AUSTR tooltip-left">
+			<span class="tooltiptext-left"><b>Name</b><br>1% of global CO<sup>2</sup> emissions<br>413,092,654.5 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+			<div class="label-d">
+				<p>Australia</p>
+				<h3>1%</h3>
+			</div>
+		</div>
+	
+		<div class="country EU tooltip">
+			<span class="tooltiptext"><b>EU</b><br>12% of global CO<sup>2</sup> emissions<br>3,543,683,484 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+			<div class="label-a">
+				<p>EU</p>
+				<h3>12%</h3>
+			</div>
+		</div>
+		<div class="country UKRAINE tooltip">
+			<span class="tooltiptext"><b>Ukraine</b><br>1% of global CO<sup>2</sup> emissions<br>212,116,257.7 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+			<div class="label-e">
+				<p>Ukraine</p>
+			</div>
+		</div>
+		<div class="country TURKEY tooltip">
+			<span class="tooltiptext"><b>Turkey</b><br>1% of global CO<sup>2</sup> emissions<br>447,897,175.8 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+		    <div class="label-c">
+				<p>Turkey</p>
+				<h3>1%</h3>
+			</div>
+		</div>
+		<div class="country SA tooltip">
+			<span class="tooltiptext"><b>Saudi Arabia</b><br>2% of global CO<sup>2</sup> emissions<br>635,011,087.9 (tonnes)s<br>Source: <u>Global Carbon Atlas</u></span>
+			<div class="label-c">
+				<p>Saudi<br>Arabia</p>
+				<h3>2%</h3>
+			</div>
+		</div>
+		<div class="country S-AFRICA tooltip">
+			<span class="tooltiptext"><b>South Africa</b><br>2% of global CO<sup>2</sup> emissions<br>456,325,215.5 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+		    <div class="label-d">
+				<p>South<br>Africa</p>
+				<h3>2%</h3>
+			</div>
+		</div>
+		<div class="country BRAZIL tooltip">
+			<span class="tooltiptext"><b>Brazil</b><br>2% of global CO<sup>2</sup> emissions<br>476,066,778.3 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+			<div class="label-c">
+				<p>Brazil</p>
+				<h3>2%</h3>
+			</div>
+		</div>
+		<div class="country ARGEN tooltip">
+			<span class="tooltiptext"><b>Argentina</b><br>1% of global CO<sup>2</sup> emissions<br>204,323,434.8 (tonnes)<br>Source: <u>Global Carbon Atlas</u></span>
+		    <div class="label-e">
+				<p>Argentina</p>
+			</div>
+		</div>
+	</div>
+</body>
